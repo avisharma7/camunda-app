@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0jev571" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.26.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <bpmn:process id="subprocess_execute" isExecutable="true" camunda:historyTimeToLive="5">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0rqrrro</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:scriptTask id="Activity_0gste2f" name="Assign User Object" scriptFormat="javascript" camunda:resultVariable="userObj1">
+      <bpmn:incoming>Flow_0rqrrro</bpmn:incoming>
+      <bpmn:outgoing>Flow_12ypit7</bpmn:outgoing>
+      <bpmn:script>var userObj = {
+id: 2
+}
+userObj;</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0rqrrro" sourceRef="StartEvent_1" targetRef="Activity_0gste2f" />
+    <bpmn:scriptTask id="Activity_120ube4" name="Assign User Object 2" scriptFormat="javascript" camunda:resultVariable="userObj2">
+      <bpmn:incoming>Flow_0ci87hg</bpmn:incoming>
+      <bpmn:outgoing>Flow_09apd9z</bpmn:outgoing>
+      <bpmn:script>var userObj = {
+id: 1
+}
+userObj;</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_12ypit7" sourceRef="Activity_0gste2f" targetRef="Activity_0d63ppa" />
+    <bpmn:sequenceFlow id="Flow_0ci87hg" sourceRef="Activity_0d63ppa" targetRef="Activity_120ube4" />
+    <bpmn:callActivity id="Activity_0d63ppa" name="Assign Name and email" calledElement="subprocess_name_email_execute">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="inputObj">
+            <camunda:script scriptFormat="javascript">userObj1;</camunda:script>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="temp">
+            <camunda:script scriptFormat="javascript"> userObj1 = outputObj;
+print("userObj1 after call Activity:: " + JSON.stringify(userObj1));</camunda:script>
+          </camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:in local="true" variables="all" />
+        <camunda:out local="true" variables="all" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_12ypit7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ci87hg</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:callActivity id="Activity_1ua33gy" name="Assign Name and email" calledElement="subprocess_name_email_execute">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="inputObj">
+            <camunda:script scriptFormat="javascript">userObj2;</camunda:script>
+          </camunda:inputParameter>
+          <camunda:outputParameter name="temp">
+            <camunda:script scriptFormat="javascript"> userObj2 = outputObj;
+print("userObj2 after call Activity:: " + JSON.stringify(userObj2));</camunda:script>
+          </camunda:outputParameter>
+        </camunda:inputOutput>
+        <camunda:in local="true" variables="all" />
+        <camunda:out local="true" variables="all" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09apd9z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1arhthn</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_09apd9z" sourceRef="Activity_120ube4" targetRef="Activity_1ua33gy" />
+    <bpmn:subProcess id="Activity_0lbqvtu" name="Assign Department info">
+      <bpmn:incoming>Flow_1arhthn</bpmn:incoming>
+      <bpmn:outgoing>Flow_1s6not9</bpmn:outgoing>
+      <bpmn:startEvent id="Event_18p8ldo">
+        <bpmn:outgoing>Flow_1lov2ki</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_1lov2ki" sourceRef="Event_18p8ldo" targetRef="Activity_0ep6iwx" />
+      <bpmn:sequenceFlow id="Flow_0tzugot" sourceRef="Activity_0ep6iwx" targetRef="Activity_1bokozl" />
+      <bpmn:endEvent id="Event_0oh5hwq">
+        <bpmn:incoming>Flow_1wd0yg0</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_1wd0yg0" sourceRef="Activity_1bokozl" targetRef="Event_0oh5hwq" />
+      <bpmn:scriptTask id="Activity_0ep6iwx" name="Assign Department name and id" scriptFormat="javascript">
+        <bpmn:incoming>Flow_1lov2ki</bpmn:incoming>
+        <bpmn:outgoing>Flow_0tzugot</bpmn:outgoing>
+        <bpmn:script>userObj1.departmentId = 21;
+userObj1.departmentName = "IT";</bpmn:script>
+      </bpmn:scriptTask>
+      <bpmn:scriptTask id="Activity_1bokozl" name="Assign department director" scriptFormat="javascript">
+        <bpmn:incoming>Flow_0tzugot</bpmn:incoming>
+        <bpmn:outgoing>Flow_1wd0yg0</bpmn:outgoing>
+        <bpmn:script>userObj1.departmentDirector = "Jon";</bpmn:script>
+      </bpmn:scriptTask>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_1arhthn" sourceRef="Activity_1ua33gy" targetRef="Activity_0lbqvtu" />
+    <bpmn:sequenceFlow id="Flow_1s6not9" sourceRef="Activity_0lbqvtu" targetRef="Activity_0vtjczo" />
+    <bpmn:scriptTask id="Activity_0vtjczo" name="Print userObj1" scriptFormat="javascript">
+      <bpmn:incoming>Flow_1s6not9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tymi87</bpmn:outgoing>
+      <bpmn:script>print("printing userObj1 after using embedded sub process" + JSON.stringify(userObj1));</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:endEvent id="Event_196zoyx">
+      <bpmn:incoming>Flow_0tymi87</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0tymi87" sourceRef="Activity_0vtjczo" targetRef="Event_196zoyx" />
+    <bpmn:textAnnotation id="TextAnnotation_1gtppav">
+      <bpmn:text>call activity task for sub process</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1oiwk9g" associationDirection="None" sourceRef="Activity_0d63ppa" targetRef="TextAnnotation_1gtppav" />
+    <bpmn:textAnnotation id="TextAnnotation_10qtgg9">
+      <bpmn:text>for assigning depart id, depart, name and depart. director</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_0bt1fl2" associationDirection="None" sourceRef="Activity_0lbqvtu" targetRef="TextAnnotation_10qtgg9" />
+    <bpmn:textAnnotation id="TextAnnotation_0u94c7g">
+      <bpmn:text>ex; Embedded sub process</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1ad3jbs" associationDirection="None" sourceRef="Activity_0lbqvtu" targetRef="TextAnnotation_0u94c7g" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="subprocess_execute">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1wcmzqx_di" bpmnElement="Activity_0gste2f">
+        <dc:Bounds x="260" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0a9lhp0" bpmnElement="Activity_120ube4">
+        <dc:Bounds x="650" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1s1nebk_di" bpmnElement="Activity_0d63ppa">
+        <dc:Bounds x="440" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0loh08g" bpmnElement="Activity_1ua33gy">
+        <dc:Bounds x="820" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0454fiz_di" bpmnElement="Activity_0vtjczo">
+        <dc:Bounds x="1610" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_196zoyx_di" bpmnElement="Event_196zoyx">
+        <dc:Bounds x="1772" y="342" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tpjaw0_di" bpmnElement="Activity_0lbqvtu" isExpanded="true">
+        <dc:Bounds x="980" y="260" width="570" height="200" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_18p8ldo_di" bpmnElement="Event_18p8ldo">
+        <dc:Bounds x="1002" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0oh5hwq_di" bpmnElement="Event_0oh5hwq">
+        <dc:Bounds x="1412" y="352" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gd34o8_di" bpmnElement="Activity_0ep6iwx">
+        <dc:Bounds x="1090" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1m2q601_di" bpmnElement="Activity_1bokozl">
+        <dc:Bounds x="1250" y="330" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1lov2ki_di" bpmnElement="Flow_1lov2ki">
+        <di:waypoint x="1038" y="370" />
+        <di:waypoint x="1090" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wd0yg0_di" bpmnElement="Flow_1wd0yg0">
+        <di:waypoint x="1350" y="370" />
+        <di:waypoint x="1412" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tzugot_di" bpmnElement="Flow_0tzugot">
+        <di:waypoint x="1190" y="370" />
+        <di:waypoint x="1250" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0bt1fl2_di" bpmnElement="Association_0bt1fl2">
+        <di:waypoint x="1272" y="260" />
+        <di:waypoint x="1340" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1ad3jbs_di" bpmnElement="Association_1ad3jbs">
+        <di:waypoint x="1247" y="260" />
+        <di:waypoint x="1368" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1gtppav_di" bpmnElement="TextAnnotation_1gtppav">
+        <dc:Bounds x="560" y="220" width="100" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0rqrrro_di" bpmnElement="Flow_0rqrrro">
+        <di:waypoint x="188" y="370" />
+        <di:waypoint x="260" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12ypit7_di" bpmnElement="Flow_12ypit7">
+        <di:waypoint x="360" y="370" />
+        <di:waypoint x="440" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ci87hg_di" bpmnElement="Flow_0ci87hg">
+        <di:waypoint x="540" y="370" />
+        <di:waypoint x="650" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09apd9z_di" bpmnElement="Flow_09apd9z">
+        <di:waypoint x="750" y="370" />
+        <di:waypoint x="820" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1oiwk9g_di" bpmnElement="Association_1oiwk9g">
+        <di:waypoint x="526" y="330" />
+        <di:waypoint x="587" y="261" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1arhthn_di" bpmnElement="Flow_1arhthn">
+        <di:waypoint x="920" y="370" />
+        <di:waypoint x="980" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_10qtgg9_di" bpmnElement="TextAnnotation_10qtgg9">
+        <dc:Bounds x="1340" y="140" width="99.98694034205708" height="84.63949843260188" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_0u94c7g_di" bpmnElement="TextAnnotation_0u94c7g">
+        <dc:Bounds x="1340" y="80" width="99.99821149133365" height="40.44750430292599" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1s6not9_di" bpmnElement="Flow_1s6not9">
+        <di:waypoint x="1550" y="360" />
+        <di:waypoint x="1610" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tymi87_di" bpmnElement="Flow_0tymi87">
+        <di:waypoint x="1710" y="360" />
+        <di:waypoint x="1772" y="360" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

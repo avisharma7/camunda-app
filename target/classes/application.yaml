@@ -1,0 +1,13 @@
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
+
+camunda:
+  bpm:
+    generic-properties:
+      properties:
+        historyTimeToLive: 5
+
+#  Here the value 5 specifies that it is going to keep the data until 5 days.
